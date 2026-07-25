@@ -28,7 +28,7 @@ mkdir -p \
     "$APP_PATH/Contents/Info.plist"
 /usr/bin/plutil -replace CFBundleShortVersionString -string 1.0 \
     "$APP_PATH/Contents/Info.plist"
-/usr/bin/plutil -replace CFBundleVersion -string 11 \
+/usr/bin/plutil -replace CFBundleVersion -string 12 \
     "$APP_PATH/Contents/Info.plist"
 /usr/bin/plutil -replace LSMinimumSystemVersion -string 26.0 \
     "$APP_PATH/Contents/Info.plist"

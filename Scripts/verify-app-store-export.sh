@@ -67,7 +67,7 @@ uses_non_exempt_encryption="$(/usr/libexec/PlistBuddy \
 
 [[ "$bundle_identifier" == "io.github.hshimomura.MDViewer" ]]
 [[ "$marketing_version" == "1.0" ]]
-[[ "$build_version" == "11" ]]
+[[ "$build_version" == "12" ]]
 [[ "$minimum_system" == "26.0" ]]
 [[ "$document_role" == "Viewer" ]]
 [[ "$markdown_type" == "net.daringfireball.markdown" ]]
@@ -115,6 +115,6 @@ done
 package_checksum="$(/usr/bin/shasum -a 256 "$PACKAGE_PATH" |
     /usr/bin/awk '{print $1}')"
 
-print "Verified MD Viewer 1.0 (11) App Store export."
+print "Verified MD Viewer 1.0 (12) App Store export."
 print "Architectures: $architectures"
 print "Package SHA-256: $package_checksum"

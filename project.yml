@@ -15,6 +15,12 @@ packages:
   Textual:
     url: https://github.com/gonzalezreal/textual
     exactVersion: 0.5.0
+  SwiftUIMath:
+    url: https://github.com/gonzalezreal/swiftui-math
+    exactVersion: 0.1.0
+  ConcurrencyExtras:
+    url: https://github.com/pointfreeco/swift-concurrency-extras
+    exactVersion: 1.4.0
 
 settings:
   base:
@@ -48,7 +54,7 @@ targets:
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
         CODE_SIGN_ENTITLEMENTS: Packaging/MDViewer.entitlements
         CODE_SIGN_STYLE: Automatic
-        CURRENT_PROJECT_VERSION: "11"
+        CURRENT_PROJECT_VERSION: "12"
         DEVELOPMENT_TEAM: ZLX73742D3
         ENABLE_HARDENED_RUNTIME: YES
         GENERATE_INFOPLIST_FILE: NO
@@ -68,10 +74,12 @@ targets:
       - target: MDPreview
     settings:
       base:
+        BUNDLE_LOADER: "$(TEST_HOST)"
         CODE_SIGN_STYLE: Automatic
         DEVELOPMENT_TEAM: ZLX73742D3
         GENERATE_INFOPLIST_FILE: YES
         PRODUCT_BUNDLE_IDENTIFIER: io.github.hshimomura.MDViewerTests
+        TEST_HOST: "$(BUILT_PRODUCTS_DIR)/MD Viewer.app/Contents/MacOS/MD Viewer"
 
 schemes:
   MDPreview:

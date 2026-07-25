@@ -37,7 +37,7 @@ build_version="$(/usr/libexec/PlistBuddy \
 [[ "$icon_file" == "AppIcon.icns" ]]
 [[ "$bundle_identifier" == "io.github.hshimomura.MDViewer" ]]
 [[ "$marketing_version" == "1.0" ]]
-[[ "$build_version" == "11" ]]
+[[ "$build_version" == "12" ]]
 [[ -f "$APP_PATH/Contents/Resources/AppIcon.icns" ]]
 [[ -f "$APP_PATH/Contents/Resources/PrivacyInfo.xcprivacy" ]]
 [[ -f \
@@ -45,4 +45,4 @@ build_version="$(/usr/libexec/PlistBuddy \
 [[ -f \
     "$APP_PATH/Contents/Resources/ThirdPartyLicenses/Mermaid-LICENSE.txt" ]]
 
-print "Verified MD Viewer 1.0 (11), read-only registration, privacy manifest, app icon, and offline Mermaid runtime."
+print "Verified MD Viewer 1.0 (12), read-only registration, privacy manifest, app icon, and offline Mermaid runtime."

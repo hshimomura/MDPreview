@@ -227,6 +227,8 @@
 			mainGroup = 948C07D6D92DE79B515C2B00;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
+				078D47AE9ED5554AC9CCA7E7 /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */,
+				F72080D21FF94D1FA95C34E5 /* XCRemoteSwiftPackageReference "swiftui-math" */,
 				FC180989AEE5325EC873BAEC /* XCRemoteSwiftPackageReference "textual" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -355,7 +357,7 @@
 				CODE_SIGN_ENTITLEMENTS = Packaging/MDViewer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = ZLX73742D3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -380,7 +382,7 @@
 				CODE_SIGN_ENTITLEMENTS = Packaging/MDViewer.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = ZLX73742D3;
 				ENABLE_HARDENED_RUNTIME = YES;
 				GENERATE_INFOPLIST_FILE = NO;
@@ -413,7 +415,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.hshimomura.MDViewerTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MDPreview.app/Contents/MacOS/MDPreview";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MD Viewer.app/Contents/MacOS/MD Viewer";
 			};
 			name = Debug;
 		};
@@ -432,7 +434,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.hshimomura.MDViewerTests;
 				SDKROOT = macosx;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MDPreview.app/Contents/MacOS/MDPreview";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MD Viewer.app/Contents/MacOS/MD Viewer";
 			};
 			name = Release;
 		};
@@ -532,6 +534,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		078D47AE9ED5554AC9CCA7E7 /* XCRemoteSwiftPackageReference "swift-concurrency-extras" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-concurrency-extras";
+			requirement = {
+				kind = exactVersion;
+				version = 1.4.0;
+			};
+		};
+		F72080D21FF94D1FA95C34E5 /* XCRemoteSwiftPackageReference "swiftui-math" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swiftui-math";
+			requirement = {
+				kind = exactVersion;
+				version = 0.1.0;
+			};
+		};
 		FC180989AEE5325EC873BAEC /* XCRemoteSwiftPackageReference "textual" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/gonzalezreal/textual";
