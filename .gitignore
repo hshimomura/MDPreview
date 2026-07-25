@@ -5,3 +5,13 @@ dist/
 AppStore/Screenshots/*.jpg
 AppStore/Screenshots/*.jpeg
 AppStore/Screenshots/*.png
+.env
+.env.*
+*.key
+*.p12
+*.pem
+*.pfx
+*.mobileprovision
+*.provisionprofile
+*.xcarchive/
+xcuserdata/
