@@ -40,6 +40,12 @@ MarkdownContentParser
                strict security・外部遷移禁止・オフライン
 ```
 
+macOS 26では、ローカルHTMLだけを表示する場合もWebKitのNetwork Process起動に
+App Sandboxの`com.apple.security.network.client`が必要になる。Mermaid本体は
+アプリ内に同梱し、`default-src 'none'`のContent Security Policyと
+`WKNavigationDelegate`の外部遷移拒否を併用する。文書内容や利用情報を外部へ
+送信する処理は持たない。
+
 ## OSS選定
 
 | 候補 | 評価 | 判断 |

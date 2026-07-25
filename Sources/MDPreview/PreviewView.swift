@@ -8,7 +8,7 @@ struct PreviewView: View {
   @State private var sectionTops: [String: CGFloat] = [:]
   @State private var currentSectionID: String?
   @State private var scrollRequest: OutlineScrollRequest?
-  @State private var isContentsVisible = true
+  @State private var splitViewVisibility: NavigationSplitViewVisibility = .all
   @State private var printCoordinator = DocumentPrintCoordinator()
 
   init(document: MarkdownDocument, fileURL: URL?) {
@@ -29,36 +29,26 @@ struct PreviewView: View {
           description: Text("This document contains no text.")
         )
       } else {
-        HSplitView {
-          if isContentsVisible {
-            OutlineSidebar(
-              headings: model.content.headings,
-              currentSectionID: currentSectionID
-            ) { sectionID in
-              scrollRequest = OutlineScrollRequest(sectionID: sectionID)
-            }
-            .frame(minWidth: 190, idealWidth: 230, maxWidth: 320)
+        NavigationSplitView(columnVisibility: $splitViewVisibility) {
+          OutlineSidebar(
+            headings: model.content.headings,
+            currentSectionID: currentSectionID
+          ) { sectionID in
+            scrollRequest = OutlineScrollRequest(sectionID: sectionID)
           }
-
+          .navigationSplitViewColumnWidth(
+            min: 190,
+            ideal: 230,
+            max: 320
+          )
+        } detail: {
           documentPreview
         }
+        .navigationSplitViewStyle(.prominentDetail)
       }
     }
     .frame(minWidth: 700, minHeight: 420)
     .background(WindowSizeRestorer())
-    .toolbar {
-      ToolbarItem(placement: .navigation) {
-        Button {
-          toggleContents()
-        } label: {
-          Label(
-            isContentsVisible ? "Hide Contents" : "Show Contents",
-            systemImage: "sidebar.left"
-          )
-        }
-        .help(isContentsVisible ? "Hide Contents" : "Show Contents")
-      }
-    }
     .safeAreaInset(edge: .bottom, spacing: 0) {
       statusBar
     }
@@ -170,6 +160,10 @@ struct PreviewView: View {
     model.content.headings.first { $0.id == currentSectionID }
   }
 
+  private var isContentsVisible: Bool {
+    splitViewVisibility != .detailOnly
+  }
+
   private func updateCurrentSection() {
     let orderedSections = model.content.sections
     let readingLine: CGFloat = 72
@@ -192,7 +186,7 @@ struct PreviewView: View {
 
   private func toggleContents() {
     withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.18)) {
-      isContentsVisible.toggle()
+      splitViewVisibility = isContentsVisible ? .detailOnly : .all
     }
   }
 }

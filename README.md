@@ -3,7 +3,9 @@
 MD Viewer is a small, read-only Markdown viewer for macOS 26. Its document UI
 is native SwiftUI: there is no editor, Electron runtime, database, account, or
 network service. A restricted local WebKit view is used only for Mermaid
-diagrams.
+diagrams. The App Sandbox network-client entitlement allows the WebKit helper
+process to start on macOS 26; the bundled renderer uses a `default-src 'none'`
+content-security policy and rejects external navigation.
 
 The detailed architecture and roadmap are in [DESIGN.md](DESIGN.md).
 
@@ -92,7 +94,7 @@ Included:
 - HTML-style `<br>`, `<br/>`, and `<br />` line breaks, including table cells
 - `Command-W` closes the active document window
 - The last document-window size is restored across launches
-- Native macOS icon built from the `Reading Window` master artwork
+- Native macOS icon with a Markdown document and glass reading lens
 - Live reload after saves from external editors, including atomic replacements
 - Left-side chapter outline with the current reading section highlighted
 - Contents can be shown or hidden from the toolbar or View menu
