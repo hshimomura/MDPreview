@@ -1,8 +1,9 @@
 # MDPreview
 
-MDPreview is a small, read-only Markdown viewer for macOS 26. It is native
-SwiftUI software: there is no editor, embedded browser, Electron runtime,
-database, account, or network service.
+MDPreview is a small, read-only Markdown viewer for macOS 26. Its document UI
+is native SwiftUI: there is no editor, Electron runtime, database, account, or
+network service. A restricted local WebKit view is used only for Mermaid
+diagrams.
 
 The detailed architecture and roadmap are in [DESIGN.md](DESIGN.md).
 
@@ -15,13 +16,14 @@ Finder / File > Open
 SwiftUI DocumentGroup(viewing:)
         |
         v
-MarkdownDocument (UTF-8, immutable String)
+PreviewDocumentModel (UTF-8 + live file monitoring)
         |
         v
-Textual StructuredText (native SwiftUI rendering)
+Heading / Markdown / Mermaid block parser
         |
-        v
-Scrollable, selectable preview
+        +-- Textual StructuredText (native Markdown)
+        |
+        +-- bundled Mermaid runtime (offline diagram)
 ```
 
 - `DocumentGroup(viewing:)` provides read-only document lifecycle and
@@ -29,6 +31,7 @@ Scrollable, selectable preview
 - `net.daringfireball.markdown` registers `.md` and `.markdown` with a
   `Viewer` role and `Alternate` handler rank.
 - Textual 0.5.0 renders structured Markdown with native SwiftUI views.
+- Mermaid 11.15.0 is bundled locally; diagrams require no installation or CDN.
 - Swift Package Manager pins the dependency graph in `Package.resolved`.
 - The app targets macOS 26 and currently builds an Apple-silicon binary.
 
@@ -69,14 +72,24 @@ Included:
 - Tables, lists, code blocks, links, and selectable text
 - HTML-style `<br>`, `<br/>`, and `<br />` line breaks, including table cells
 - `Command-W` closes the active document window
+- The last document-window size is restored across launches
+- Native macOS icon built from the `Reading Window` master artwork
+- Live reload after saves from external editors, including atomic replacements
+- Left-side chapter outline with the current reading section highlighted
+- Contents can be shown or hidden from the toolbar or View menu
+- Offline Mermaid fenced-code rendering with no user setup
+- Native Print panel from File > Print or `Command-P`, with a dedicated
+  print layout for headings, body text, lists, tables, quotes, and code.
+  Mermaid diagrams print as their source-code fallback. Saving as PDF inherits
+  the Markdown document's base file name.
 - Light and dark appearance through system colors
 - UTF-8 input and an empty-document state
 
 Deferred:
 
-- Automatic reload after external file changes
 - Relative local image resolution
-- Find navigator, outline, zoom, and print
+- Find navigator and zoom
+- Quick Look integration (intentionally out of scope)
 - Preferences and theme selection
 - Universal binary, release signing, notarization, and updater
 

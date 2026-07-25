@@ -19,8 +19,17 @@ document_role="$(/usr/libexec/PlistBuddy \
 markdown_type="$(/usr/libexec/PlistBuddy \
     -c "Print :CFBundleDocumentTypes:0:LSItemContentTypes:0" \
     "$APP_PATH/Contents/Info.plist")"
+icon_file="$(/usr/libexec/PlistBuddy \
+    -c "Print :CFBundleIconFile" \
+    "$APP_PATH/Contents/Info.plist")"
 
 [[ "$document_role" == "Viewer" ]]
 [[ "$markdown_type" == "net.daringfireball.markdown" ]]
+[[ "$icon_file" == "AppIcon.icns" ]]
+[[ -f "$APP_PATH/Contents/Resources/AppIcon.icns" ]]
+[[ -f \
+    "$APP_PATH/Contents/Resources/MDPreview_MDPreview.bundle/Resources/Mermaid/mermaid.min.js" ]]
+[[ -f \
+    "$APP_PATH/Contents/Resources/ThirdPartyLicenses/Mermaid-LICENSE.txt" ]]
 
-print "Verified read-only Markdown viewer registration."
+print "Verified read-only registration, app icon, and offline Mermaid runtime."

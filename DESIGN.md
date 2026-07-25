@@ -3,8 +3,9 @@
 ## 結論
 
 macOS 26専用の読み取り専用Markdownビューアとして、SwiftUIの
-`DocumentGroup(viewing:)`とTextual 0.5.0を組み合わせる。WebKit、
-Electron、独自エディタ、データベースは使わない。
+`DocumentGroup(viewing:)`とTextual 0.5.0を組み合わせる。Mermaidだけは
+同梱ランタイムを隔離したローカルWebKitで描画する。Electron、独自エディタ、
+データベース、Quick Look拡張は使わない。
 
 この構成は、Finderから文書を開くmacOS標準の動作、複数ウインドウ、
 ダークモード、アクセシビリティ、テキスト選択を小さなコード量で得られる。
@@ -25,11 +26,18 @@ MarkdownDocument
   UTF-8 Data -> immutable String
           |
           v
-Textual StructuredText
-  SwiftUIネイティブのMarkdownレンダリング
+PreviewDocumentModel
+  ファイル実体を監視し、外部保存時に再読み込み
           |
           v
-ScrollView + Read Onlyステータス
+MarkdownContentParser
+  見出し / 通常Markdown / Mermaidを分離
+          |
+          +--> Textual StructuredText
+          |    SwiftUIネイティブのMarkdownレンダリング
+          |
+          +--> WKWebView + 同梱Mermaid
+               strict security・外部遷移禁止・オフライン
 ```
 
 ## OSS選定
@@ -37,17 +45,18 @@ ScrollView + Read Onlyステータス
 | 候補 | 評価 | 判断 |
 | --- | --- | --- |
 | Textual 0.5.0 | SwiftUIネイティブ、2026年6月更新、MIT、表・コード・選択対応 | 採用 |
+| Mermaid 11.15.0 | 図表記法の事実上の標準、MIT、固定版をオフライン同梱可能 | Mermaidブロックだけに採用 |
 | MarkdownUI 2.x | 成熟しているがmaintenance mode | 新規採用は見送り |
 | swift-markdown | Apache-2.0、GFM準拠のAST。ただし表示層を自作する必要がある | 将来の独自レンダラ候補 |
 | Ink 0.6.0 | 軽量なHTML変換、MIT。ただし最終リリースが2023年 | 見送り |
-| WebKit + HTML/CSS | 表現力は高いが、HTMLのサニタイズ、CSS、ローカル資源権限が増える | MVPでは不要 |
+| WebKit + HTML/CSS | 文書全体には権限と攻撃面が過剰 | Mermaidだけに限定 |
 | Electron | クロスプラットフォーム化が不要で、配布サイズと更新面が過剰 | 不採用 |
 
 ## ライセンス方針
 
 - アプリ本体はMITとする。
 - SwiftPM依存はバージョンを固定し、`Package.resolved`を公開する。
-- Textual、SwiftUIMath、ConcurrencyExtras、Prism.jsのライセンス全文を
+- Textual、SwiftUIMath、ConcurrencyExtras、Prism.js、Mermaidのライセンス全文を
   アプリ内に同梱する。
 - SwiftUIMathのフォントライセンス（SIL OFL 1.1、GUST）は、
   元のリソースバンドル内のライセンスファイルをそのまま保持する。
@@ -65,15 +74,25 @@ MITはFSF/OSIの自由ソフトウェア・オープンソース条件を満た�
 - `.md`と`.markdown`をViewerロールで登録する。
 - FinderまたはOpenメニューからUTF-8 Markdownを開ける。
 - Markdownが編集UIなしでレンダリングされる。
+- 外部エディタによる通常保存とatomic replaceを約0.4秒単位で検知する。
+- 左の章立てが見出しへ移動でき、読書位置に追従して現在章を強調する。
+- ContentsはツールバーまたはViewメニューから表示・非表示を切り替えられる。
+- `mermaid` fenced code blockが追加セットアップやネットワークなしで描画される。
+- FileメニューまたはCommand-PからmacOS標準のプリントパネルを開ける。
 - テスト、Info.plist、署名、依存ライセンス同梱を検証できる。
 
 ## 次の段階
 
 ### 0.2
 
-- 外部変更の監視と自動再読み込み
+- 外部変更の監視と自動再読み込み（実装済み）
+- 章立てと現在章追従（実装済み）
+- Contents表示切替と印刷（実装済み）
+- Mermaidのオフライン描画（実装済み）
+- 印刷専用TextKitレイアウトによる印刷プレビュー（実装済み）。
+  Mermaidは印刷時にソースコードへフォールバックする
 - 相対パス画像の安全な読み込み
-- Find、アウトライン、文字サイズ変更
+- Find、文字サイズ変更
 - 印刷とPDF書き出し
 
 ### 0.3

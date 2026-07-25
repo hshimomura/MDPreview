@@ -21,6 +21,9 @@ let package = Package(
       name: "MDPreview",
       dependencies: [
         .product(name: "Textual", package: "textual")
+      ],
+      resources: [
+        .copy("Resources")
       ]
     ),
     .testTarget(

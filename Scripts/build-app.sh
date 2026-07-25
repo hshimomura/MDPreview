@@ -10,6 +10,8 @@ cd "$PROJECT_ROOT"
 export CLANG_MODULE_CACHE_PATH="$PROJECT_ROOT/.build/module-cache"
 export SWIFT_MODULECACHE_PATH="$PROJECT_ROOT/.build/module-cache"
 
+"$PROJECT_ROOT/Scripts/build-icon.sh"
+
 swift build -c release --arch arm64
 BIN_DIR="$(swift build -c release --arch arm64 --show-bin-path)"
 
@@ -19,6 +21,8 @@ mkdir -p \
 
 /usr/bin/ditto "$BIN_DIR/MDPreview" "$APP_PATH/Contents/MacOS/MDPreview"
 /usr/bin/ditto "$PROJECT_ROOT/Packaging/Info.plist" "$APP_PATH/Contents/Info.plist"
+/usr/bin/ditto "$PROJECT_ROOT/Resources/AppIcon.icns" \
+    "$APP_PATH/Contents/Resources/AppIcon.icns"
 /usr/bin/ditto "$PROJECT_ROOT/THIRD_PARTY_NOTICES.md" \
     "$APP_PATH/Contents/Resources/THIRD_PARTY_NOTICES.md"
 /usr/bin/ditto "$PROJECT_ROOT/Legal/Prism-LICENSE.txt" \
@@ -36,6 +40,7 @@ license_sources=(
     "Textual" "$PROJECT_ROOT/.build/checkouts/textual/LICENSE"
     "SwiftUIMath" "$PROJECT_ROOT/.build/checkouts/swiftui-math/LICENSE"
     "ConcurrencyExtras" "$PROJECT_ROOT/.build/checkouts/swift-concurrency-extras/LICENSE"
+    "Mermaid" "$PROJECT_ROOT/Legal/Mermaid-LICENSE.txt"
 )
 
 for component source_path in "${(@kv)license_sources}"; do

@@ -1,0 +1,99 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; font-src data:;"
+  >
+  <meta name="color-scheme" content="light dark">
+  <style>
+    :root {
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+      color: CanvasText;
+      background: transparent;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: transparent;
+    }
+    #diagram {
+      box-sizing: border-box;
+      width: 100%;
+      padding: 14px;
+      overflow: hidden;
+    }
+    #diagram svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
+    .error {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 14px;
+      border: 1px solid color-mix(in srgb, CanvasText 18%, transparent);
+      border-radius: 8px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace;
+      color: CanvasText;
+      background: color-mix(in srgb, CanvasText 5%, transparent);
+    }
+  </style>
+  <script src="mermaid.min.js"></script>
+</head>
+<body>
+  <div id="diagram"></div>
+  <script>
+    const root = document.getElementById("diagram");
+    let renderSequence = 0;
+
+    function reportHeight(errorMessage) {
+      const height = Math.max(80, Math.ceil(document.documentElement.scrollHeight));
+      window.webkit.messageHandlers.diagram.postMessage({
+        height,
+        error: errorMessage || null
+      });
+    }
+
+    const observer = new ResizeObserver(() => reportHeight(null));
+    observer.observe(root);
+
+    window.renderDiagram = async function(source, theme) {
+      renderSequence += 1;
+      const renderID = `mdpreview-mermaid-${renderSequence}`;
+      root.replaceChildren();
+
+      mermaid.initialize({
+        startOnLoad: false,
+        securityLevel: "strict",
+        theme: theme === "dark" ? "dark" : "neutral",
+        suppressErrorRendering: true,
+        flowchart: {
+          htmlLabels: false
+        }
+      });
+
+      try {
+        const result = await mermaid.render(renderID, source);
+        root.innerHTML = result.svg;
+        root.querySelectorAll("a").forEach(link => {
+          link.replaceWith(...link.childNodes);
+        });
+        reportHeight(null);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        const fallback = document.createElement("pre");
+        fallback.className = "error";
+        fallback.textContent = `Mermaid diagram could not be rendered.\n\n${message}\n\n${source}`;
+        root.replaceChildren(fallback);
+        reportHeight(message);
+      }
+    };
+  </script>
+</body>
+</html>
