@@ -7,15 +7,26 @@ struct MermaidDiagramView: View {
   @Environment(\.colorScheme) private var colorScheme
   @State private var height: CGFloat = 180
   @State private var canLoadRenderer = false
+  @State private var renderState = MermaidRenderState.loading
 
   var body: some View {
     Group {
-      if canLoadRenderer {
-        MermaidWebView(
-          source: source,
-          theme: colorScheme == .dark ? "dark" : "light",
-          height: $height
-        )
+      if renderState == .failed {
+        MermaidFallbackView(source: source)
+      } else if canLoadRenderer {
+        ZStack {
+          MermaidWebView(
+            source: source,
+            theme: theme,
+            height: $height,
+            renderState: $renderState
+          )
+
+          if renderState == .loading {
+            ProgressView()
+              .controlSize(.small)
+          }
+        }
       } else {
         ProgressView()
           .controlSize(.small)
@@ -29,13 +40,72 @@ struct MermaidDiagramView: View {
       RoundedRectangle(cornerRadius: 8)
         .stroke(.separator.opacity(0.55), lineWidth: 1)
     }
-    .accessibilityLabel("Mermaid diagram")
-    .accessibilityHint("Rendered locally from the open Markdown document.")
-    .task {
+    .accessibilityElement(children: .contain)
+    .accessibilityLabel(
+      renderState == .failed
+        ? "Mermaid diagram source"
+        : "Mermaid diagram"
+    )
+    .accessibilityHint(accessibilityHint)
+    .task(id: renderRequest) {
+      renderState = .loading
+      canLoadRenderer = false
+      height = 180
       try? await Task.sleep(for: .milliseconds(120))
       guard !Task.isCancelled else { return }
       canLoadRenderer = true
     }
+  }
+
+  private var theme: String {
+    colorScheme == .dark ? "dark" : "light"
+  }
+
+  private var renderRequest: MermaidRenderRequest {
+    MermaidRenderRequest(source: source, theme: theme)
+  }
+
+  private var accessibilityHint: String {
+    if renderState == .failed {
+      return "The local diagram renderer was unavailable. The source remains readable."
+    }
+    return "Rendered locally from the open Markdown document."
+  }
+}
+
+private enum MermaidRenderState: Equatable {
+  case loading
+  case ready
+  case failed
+}
+
+private struct MermaidRenderRequest: Equatable {
+  let source: String
+  let theme: String
+}
+
+private struct MermaidFallbackView: View {
+  let source: String
+
+  var body: some View {
+    VStack(alignment: .leading, spacing: 10) {
+      Label("Diagram Preview Unavailable", systemImage: "exclamationmark.triangle")
+        .font(.callout.weight(.semibold))
+
+      Text("The Mermaid source is shown below.")
+        .font(.caption)
+        .foregroundStyle(.secondary)
+
+      ScrollView(.horizontal) {
+        Text(source)
+          .font(.system(.caption, design: .monospaced))
+          .textSelection(.enabled)
+          .frame(maxWidth: .infinity, alignment: .leading)
+      }
+    }
+    .padding(14)
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+    .background(.quaternary.opacity(0.35))
   }
 }
 
@@ -43,9 +113,10 @@ private struct MermaidWebView: NSViewRepresentable {
   let source: String
   let theme: String
   @Binding var height: CGFloat
+  @Binding var renderState: MermaidRenderState
 
   func makeCoordinator() -> Coordinator {
-    Coordinator(height: $height)
+    Coordinator(height: $height, renderState: $renderState)
   }
 
   func makeNSView(context: Context) -> WKWebView {
@@ -92,6 +163,7 @@ private struct MermaidWebView: NSViewRepresentable {
       forName: Coordinator.messageName
     )
     webView.navigationDelegate = nil
+    coordinator.cancelRenderTimeout()
   }
 
   @MainActor
@@ -105,13 +177,20 @@ private struct MermaidWebView: NSViewRepresentable {
     private var renderedTheme: String?
     private var rendererReady = false
     private var height: Binding<CGFloat>
+    private var renderState: Binding<MermaidRenderState>
+    private var renderTimeoutTask: Task<Void, Never>?
 
-    init(height: Binding<CGFloat>) {
+    init(
+      height: Binding<CGFloat>,
+      renderState: Binding<MermaidRenderState>
+    ) {
       self.height = height
+      self.renderState = renderState
     }
 
     func loadRenderer() {
       guard let resourcesURL = Bundle.main.resourceURL, let webView else {
+        failRender()
         return
       }
       let candidates = [
@@ -141,6 +220,7 @@ private struct MermaidWebView: NSViewRepresentable {
           encoding: .utf8
         )
       else {
+        failRender()
         return
       }
 
@@ -152,6 +232,7 @@ private struct MermaidWebView: NSViewRepresentable {
         completeHTML,
         baseURL: nil
       )
+      startRenderTimeout()
     }
 
     func render(source: String, theme: String) {
@@ -167,6 +248,26 @@ private struct MermaidWebView: NSViewRepresentable {
       if let pendingSource, let pendingTheme {
         performRender(source: pendingSource, theme: pendingTheme)
       }
+    }
+
+    func webView(
+      _ webView: WKWebView,
+      didFail navigation: WKNavigation!,
+      withError error: any Error
+    ) {
+      failRender()
+    }
+
+    func webView(
+      _ webView: WKWebView,
+      didFailProvisionalNavigation navigation: WKNavigation!,
+      withError error: any Error
+    ) {
+      failRender()
+    }
+
+    func webViewWebContentProcessDidTerminate(_ webView: WKWebView) {
+      failRender()
     }
 
     func webView(
@@ -201,6 +302,13 @@ private struct MermaidWebView: NSViewRepresentable {
         return
       }
       height.wrappedValue = min(max(reportedHeight, 80), 4_000)
+      renderState.wrappedValue = .ready
+      cancelRenderTimeout()
+    }
+
+    func cancelRenderTimeout() {
+      renderTimeoutTask?.cancel()
+      renderTimeoutTask = nil
     }
 
     private func performRender(source: String, theme: String) {
@@ -213,6 +321,20 @@ private struct MermaidWebView: NSViewRepresentable {
       webView.evaluateJavaScript(
         "window.renderDiagram(\(sourceJSON), \(themeJSON));"
       )
+    }
+
+    private func startRenderTimeout() {
+      cancelRenderTimeout()
+      renderTimeoutTask = Task { @MainActor [weak self] in
+        try? await Task.sleep(for: .seconds(8))
+        guard !Task.isCancelled else { return }
+        self?.failRender()
+      }
+    }
+
+    private func failRender() {
+      cancelRenderTimeout()
+      renderState.wrappedValue = .failed
     }
 
     private static func jsonString(_ value: String) -> String {
