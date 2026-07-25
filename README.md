@@ -64,8 +64,18 @@ For a command-line local build:
 The local app bundle is generated at `dist/MDPreview.app`. Open the sample:
 
 ```sh
-open -a "$PWD/dist/MDPreview.app" "$PWD/Sample.md"
+./Scripts/launch-local-app.sh
 ```
+
+Pass one or more Markdown paths to open specific documents:
+
+```sh
+./Scripts/launch-local-app.sh README.md Sample.md
+```
+
+Use the script (or Finder / `open`) for GUI smoke tests. Do not execute
+`dist/MDPreview.app/Contents/MacOS/MDPreview` directly from an automation
+process; that bypasses normal LaunchServices application registration.
 
 The script build uses ad-hoc signing for local testing. Mac App Store archives
 must be created from the Xcode project with an Apple Distribution certificate.
