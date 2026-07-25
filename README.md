@@ -138,7 +138,7 @@ Before publishing:
 1. Review `Package.resolved` and `swift package show-dependencies`.
 2. Keep `THIRD_PARTY_NOTICES.md` and bundled license texts in the app.
 3. Run tests and build the Xcode `MDPreview` scheme.
-4. Complete the checklist in `AppStore/submission-checklist.md`.
+4. Complete the public release checks in `AppStore/release-checklist.md`.
 5. Archive source for the exact release tag.
 6. Publish the source and checksums with the GitHub Release.
 
