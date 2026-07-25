@@ -30,6 +30,7 @@ struct MermaidDiagramView: View {
         .stroke(.separator.opacity(0.55), lineWidth: 1)
     }
     .accessibilityLabel("Mermaid diagram")
+    .accessibilityHint("Rendered locally from the open Markdown document.")
     .task {
       try? await Task.sleep(for: .milliseconds(120))
       guard !Task.isCancelled else { return }
@@ -113,14 +114,43 @@ private struct MermaidWebView: NSViewRepresentable {
       guard let resourcesURL = Bundle.main.resourceURL, let webView else {
         return
       }
-      let rendererURL = resourcesURL
-        .appending(path: "MDPreview_MDPreview.bundle", directoryHint: .isDirectory)
-        .appending(path: "Resources/Mermaid", directoryHint: .isDirectory)
-        .appending(path: "renderer.html", directoryHint: .notDirectory)
+      let candidates = [
+        resourcesURL
+          .appending(path: "Mermaid", directoryHint: .isDirectory)
+          .appending(path: "renderer.html", directoryHint: .notDirectory),
+        resourcesURL
+          .appending(
+            path: "MDPreview_MDPreview.bundle",
+            directoryHint: .isDirectory
+          )
+          .appending(
+            path: "Resources/Mermaid",
+            directoryHint: .isDirectory
+          )
+          .appending(path: "renderer.html", directoryHint: .notDirectory),
+      ]
+      guard
+        let rendererURL = candidates.first(
+          where: { FileManager.default.fileExists(atPath: $0.path) }
+        ),
+        let rendererHTML = try? String(contentsOf: rendererURL, encoding: .utf8),
+        let mermaidJavaScript = try? String(
+          contentsOf: rendererURL
+            .deletingLastPathComponent()
+            .appending(path: "mermaid.min.js", directoryHint: .notDirectory),
+          encoding: .utf8
+        )
+      else {
+        return
+      }
 
-      webView.loadFileURL(
-        rendererURL,
-        allowingReadAccessTo: rendererURL.deletingLastPathComponent()
+      let completeHTML = rendererHTML.replacingOccurrences(
+        of: #"<script src="mermaid.min.js"></script>"#,
+        with: "<script>\(mermaidJavaScript)</script>"
+      )
+      webView.loadHTMLString(
+        completeHTML,
+        baseURL: nil
       )
     }
 

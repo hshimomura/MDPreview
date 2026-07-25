@@ -68,17 +68,17 @@
       const renderID = `mdpreview-mermaid-${renderSequence}`;
       root.replaceChildren();
 
-      mermaid.initialize({
-        startOnLoad: false,
-        securityLevel: "strict",
-        theme: theme === "dark" ? "dark" : "neutral",
-        suppressErrorRendering: true,
-        flowchart: {
-          htmlLabels: false
-        }
-      });
-
       try {
+        mermaid.initialize({
+          startOnLoad: false,
+          securityLevel: "strict",
+          theme: theme === "dark" ? "dark" : "neutral",
+          suppressErrorRendering: true,
+          flowchart: {
+            htmlLabels: false
+          }
+        });
+
         const result = await mermaid.render(renderID, source);
         root.innerHTML = result.svg;
         root.querySelectorAll("a").forEach(link => {

@@ -2,3 +2,6 @@
 .swiftpm/
 dist/
 .DS_Store
+AppStore/Screenshots/*.jpg
+AppStore/Screenshots/*.jpeg
+AppStore/Screenshots/*.png

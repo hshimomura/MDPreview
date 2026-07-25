@@ -1,0 +1,1 @@
+A quiet native reading window for Markdown, with live reload, an active chapter outline, offline Mermaid diagrams, and side-by-side document comparison.

@@ -21,10 +21,23 @@ mkdir -p \
 
 /usr/bin/ditto "$BIN_DIR/MDPreview" "$APP_PATH/Contents/MacOS/MDPreview"
 /usr/bin/ditto "$PROJECT_ROOT/Packaging/Info.plist" "$APP_PATH/Contents/Info.plist"
+/usr/bin/plutil -replace CFBundleExecutable -string MDPreview \
+    "$APP_PATH/Contents/Info.plist"
+/usr/bin/plutil -replace CFBundleIdentifier \
+    -string io.github.hshimomura.MDViewer \
+    "$APP_PATH/Contents/Info.plist"
+/usr/bin/plutil -replace CFBundleShortVersionString -string 1.0 \
+    "$APP_PATH/Contents/Info.plist"
+/usr/bin/plutil -replace CFBundleVersion -string 11 \
+    "$APP_PATH/Contents/Info.plist"
+/usr/bin/plutil -replace LSMinimumSystemVersion -string 26.0 \
+    "$APP_PATH/Contents/Info.plist"
 /usr/bin/ditto "$PROJECT_ROOT/Resources/AppIcon.icns" \
     "$APP_PATH/Contents/Resources/AppIcon.icns"
 /usr/bin/ditto "$PROJECT_ROOT/THIRD_PARTY_NOTICES.md" \
     "$APP_PATH/Contents/Resources/THIRD_PARTY_NOTICES.md"
+/usr/bin/ditto "$PROJECT_ROOT/Packaging/PrivacyInfo.xcprivacy" \
+    "$APP_PATH/Contents/Resources/PrivacyInfo.xcprivacy"
 /usr/bin/ditto "$PROJECT_ROOT/Legal/Prism-LICENSE.txt" \
     "$APP_PATH/Contents/Resources/ThirdPartyLicenses/Prism-LICENSE.txt"
 

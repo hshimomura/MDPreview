@@ -2,6 +2,8 @@ import SwiftUI
 import Textual
 
 struct PreviewView: View {
+  @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
   @State private var model: PreviewDocumentModel
   @State private var sectionTops: [String: CGFloat] = [:]
   @State private var currentSectionID: String?
@@ -114,7 +116,7 @@ struct PreviewView: View {
       }
       .onChange(of: scrollRequest) { _, request in
         guard let request else { return }
-        withAnimation(.easeInOut(duration: 0.18)) {
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.18)) {
           scrollProxy.scrollTo(request.sectionID, anchor: .top)
         }
       }
@@ -189,7 +191,7 @@ struct PreviewView: View {
   }
 
   private func toggleContents() {
-    withAnimation(.easeInOut(duration: 0.18)) {
+    withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.18)) {
       isContentsVisible.toggle()
     }
   }
@@ -245,7 +247,7 @@ private struct OutlineSidebar: View {
         )
       } else {
         ScrollView {
-          LazyVStack(alignment: .leading, spacing: 2) {
+          LazyVStack(alignment: .leading, spacing: 1) {
             ForEach(headings) { heading in
               Button {
                 onSelect(heading.id)
@@ -257,7 +259,7 @@ private struct OutlineSidebar: View {
                   .frame(maxWidth: .infinity, alignment: .leading)
                   .padding(.leading, CGFloat(max(heading.level - 1, 0)) * 14)
                   .padding(.horizontal, 9)
-                  .padding(.vertical, 6)
+                  .padding(.vertical, 4)
                   .contentShape(.rect)
               }
               .buttonStyle(.plain)

@@ -6,13 +6,14 @@ PROJECT_ROOT="${SCRIPT_DIR:h}"
 SOURCE_ICON="$PROJECT_ROOT/Resources/AppIcon-1024.png"
 ICONSET_DIR="$PROJECT_ROOT/.build/AppIcon.iconset"
 OUTPUT_ICON="$PROJECT_ROOT/Resources/AppIcon.icns"
+ASSET_ICONSET_DIR="$PROJECT_ROOT/Resources/AppIcon.xcassets/AppIcon.appiconset"
 
 if [[ ! -f "$SOURCE_ICON" ]]; then
     print -u2 "Missing icon master: $SOURCE_ICON"
     exit 1
 fi
 
-mkdir -p "$ICONSET_DIR"
+mkdir -p "$ICONSET_DIR" "$ASSET_ICONSET_DIR"
 
 typeset -a icon_variants
 icon_variants=(
@@ -36,6 +37,9 @@ for variant in "${icon_variants[@]}"; do
         "$SOURCE_ICON" \
         --out "$ICONSET_DIR/$filename" \
         >/dev/null
+    /usr/bin/ditto \
+        "$ICONSET_DIR/$filename" \
+        "$ASSET_ICONSET_DIR/$filename"
 done
 
 /usr/bin/iconutil \

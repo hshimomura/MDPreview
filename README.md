@@ -1,6 +1,6 @@
-# MDPreview
+# MD Viewer: Reading Window
 
-MDPreview is a small, read-only Markdown viewer for macOS 26. Its document UI
+MD Viewer is a small, read-only Markdown viewer for macOS 26. Its document UI
 is native SwiftUI: there is no editor, Electron runtime, database, account, or
 network service. A restricted local WebKit view is used only for Mermaid
 diagrams.
@@ -42,32 +42,41 @@ Heading / Markdown / Mermaid block parser
 - Swift 6.2 or newer
 - Network access for the first Swift Package Manager dependency resolution
 
-## Build
+## Xcode build
 
 ```sh
-chmod +x Scripts/build-app.sh Scripts/verify-app.sh
+brew install xcodegen
+./Scripts/generate-xcode-project.sh
+open MDViewer.xcodeproj
+```
+
+The generated `MDViewer.xcodeproj` contains the macOS app and unit-test targets.
+The App Store scheme uses bundle identifier `io.github.hshimomura.MDViewer`,
+App Sandbox, hardened runtime, privacy manifest, and version 1.0 (build 11).
+
+For a command-line local build:
+
+```sh
 ./Scripts/build-app.sh
 ./Scripts/verify-app.sh
 ```
 
-The app bundle is generated at `dist/MDPreview.app`.
-
-Open the sample:
+The local app bundle is generated at `dist/MDPreview.app`. Open the sample:
 
 ```sh
 open -a "$PWD/dist/MDPreview.app" "$PWD/Sample.md"
 ```
 
-The build uses ad-hoc signing for local testing. A public binary should use a
-Developer ID Application certificate, hardened runtime, notarization, and a
-stapled notarization ticket.
+The script build uses ad-hoc signing for local testing. Mac App Store archives
+must be created from the Xcode project with an Apple Distribution certificate.
 
 ## MVP scope
 
 Included:
 
 - Finder and Open-menu handling for `.md` and `.markdown`
-- Multiple read-only document windows
+- Multiple read-only document windows, multi-file Open, and side-by-side
+  window arrangement
 - GitHub-like native rendering
 - Tables, lists, code blocks, links, and selectable text
 - HTML-style `<br>`, `<br/>`, and `<br />` line breaks, including table cells
@@ -91,7 +100,7 @@ Deferred:
 - Find navigator and zoom
 - Quick Look integration (intentionally out of scope)
 - Preferences and theme selection
-- Universal binary, release signing, notarization, and updater
+- Intel support and an updater (Mac App Store distribution supplies updates)
 
 ## License and release checklist
 
@@ -100,14 +109,19 @@ permissively licensed, but their notices must travel with distributed binaries.
 
 Before publishing:
 
-1. Replace the bundle identifier and copyright holder.
-2. Review `Package.resolved` and `swift package show-dependencies`.
-3. Keep `THIRD_PARTY_NOTICES.md` and bundled license texts in the app.
-4. Run tests, build, and `Scripts/verify-app.sh`.
+1. Review `Package.resolved` and `swift package show-dependencies`.
+2. Keep `THIRD_PARTY_NOTICES.md` and bundled license texts in the app.
+3. Run tests and build the Xcode `MDPreview` scheme.
+4. Complete the checklist in `AppStore/submission-checklist.md`.
 5. Archive source for the exact release tag.
-6. Sign with Developer ID, enable hardened runtime, notarize, and staple.
-7. Publish the source and checksums with the GitHub Release.
+6. Publish the source and checksums with the GitHub Release.
 
 GitHub Actions can later build and test pull requests without publishing
 secrets. Release signing should use protected repository secrets or a separate
 trusted release machine.
+
+## Privacy and support
+
+- Product page: https://hshimomura.github.io/MDPreview/
+- Privacy policy: https://hshimomura.github.io/MDPreview/privacy
+- Support: https://hshimomura.github.io/MDPreview/support

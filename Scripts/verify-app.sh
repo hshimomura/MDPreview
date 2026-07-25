@@ -22,14 +22,27 @@ markdown_type="$(/usr/libexec/PlistBuddy \
 icon_file="$(/usr/libexec/PlistBuddy \
     -c "Print :CFBundleIconFile" \
     "$APP_PATH/Contents/Info.plist")"
+bundle_identifier="$(/usr/libexec/PlistBuddy \
+    -c "Print :CFBundleIdentifier" \
+    "$APP_PATH/Contents/Info.plist")"
+marketing_version="$(/usr/libexec/PlistBuddy \
+    -c "Print :CFBundleShortVersionString" \
+    "$APP_PATH/Contents/Info.plist")"
+build_version="$(/usr/libexec/PlistBuddy \
+    -c "Print :CFBundleVersion" \
+    "$APP_PATH/Contents/Info.plist")"
 
 [[ "$document_role" == "Viewer" ]]
 [[ "$markdown_type" == "net.daringfireball.markdown" ]]
 [[ "$icon_file" == "AppIcon.icns" ]]
+[[ "$bundle_identifier" == "io.github.hshimomura.MDViewer" ]]
+[[ "$marketing_version" == "1.0" ]]
+[[ "$build_version" == "11" ]]
 [[ -f "$APP_PATH/Contents/Resources/AppIcon.icns" ]]
+[[ -f "$APP_PATH/Contents/Resources/PrivacyInfo.xcprivacy" ]]
 [[ -f \
     "$APP_PATH/Contents/Resources/MDPreview_MDPreview.bundle/Resources/Mermaid/mermaid.min.js" ]]
 [[ -f \
     "$APP_PATH/Contents/Resources/ThirdPartyLicenses/Mermaid-LICENSE.txt" ]]
 
-print "Verified read-only registration, app icon, and offline Mermaid runtime."
+print "Verified MD Viewer 1.0 (11), read-only registration, privacy manifest, app icon, and offline Mermaid runtime."
