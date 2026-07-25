@@ -31,13 +31,17 @@ marketing_version="$(/usr/libexec/PlistBuddy \
 build_version="$(/usr/libexec/PlistBuddy \
     -c "Print :CFBundleVersion" \
     "$APP_PATH/Contents/Info.plist")"
+app_category="$(/usr/libexec/PlistBuddy \
+    -c "Print :LSApplicationCategoryType" \
+    "$APP_PATH/Contents/Info.plist")"
 
 [[ "$document_role" == "Viewer" ]]
 [[ "$markdown_type" == "net.daringfireball.markdown" ]]
 [[ "$icon_file" == "AppIcon.icns" ]]
 [[ "$bundle_identifier" == "io.github.hshimomura.MDViewer" ]]
 [[ "$marketing_version" == "1.0" ]]
-[[ "$build_version" == "12" ]]
+[[ "$build_version" == "13" ]]
+[[ "$app_category" == "public.app-category.productivity" ]]
 [[ -f "$APP_PATH/Contents/Resources/AppIcon.icns" ]]
 [[ -f "$APP_PATH/Contents/Resources/PrivacyInfo.xcprivacy" ]]
 [[ -f \
@@ -45,4 +49,4 @@ build_version="$(/usr/libexec/PlistBuddy \
 [[ -f \
     "$APP_PATH/Contents/Resources/ThirdPartyLicenses/Mermaid-LICENSE.txt" ]]
 
-print "Verified MD Viewer 1.0 (12), read-only registration, privacy manifest, app icon, and offline Mermaid runtime."
+print "Verified MD Viewer 1.0 (13), read-only registration, Productivity category, privacy manifest, app icon, and offline Mermaid runtime."

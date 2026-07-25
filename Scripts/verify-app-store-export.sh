@@ -64,14 +64,17 @@ markdown_type="$(/usr/libexec/PlistBuddy \
     -c "Print :CFBundleDocumentTypes:0:LSItemContentTypes:0" "$INFO_PLIST")"
 uses_non_exempt_encryption="$(/usr/libexec/PlistBuddy \
     -c "Print :ITSAppUsesNonExemptEncryption" "$INFO_PLIST")"
+app_category="$(/usr/libexec/PlistBuddy \
+    -c "Print :LSApplicationCategoryType" "$INFO_PLIST")"
 
 [[ "$bundle_identifier" == "io.github.hshimomura.MDViewer" ]]
 [[ "$marketing_version" == "1.0" ]]
-[[ "$build_version" == "12" ]]
+[[ "$build_version" == "13" ]]
 [[ "$minimum_system" == "26.0" ]]
 [[ "$document_role" == "Viewer" ]]
 [[ "$markdown_type" == "net.daringfireball.markdown" ]]
 [[ "$uses_non_exempt_encryption" == "false" ]]
+[[ "$app_category" == "public.app-category.productivity" ]]
 
 /usr/bin/codesign -d --entitlements :- "$APP_PATH" \
     >"$ENTITLEMENTS_PATH" 2>/dev/null
@@ -115,6 +118,6 @@ done
 package_checksum="$(/usr/bin/shasum -a 256 "$PACKAGE_PATH" |
     /usr/bin/awk '{print $1}')"
 
-print "Verified MD Viewer 1.0 (12) App Store export."
+print "Verified MD Viewer 1.0 (13) App Store export."
 print "Architectures: $architectures"
 print "Package SHA-256: $package_checksum"

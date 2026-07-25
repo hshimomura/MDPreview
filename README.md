@@ -55,7 +55,8 @@ open MDViewer.xcodeproj
 
 The generated `MDViewer.xcodeproj` contains the macOS app and unit-test targets.
 The App Store scheme uses bundle identifier `io.github.hshimomura.MDViewer`,
-App Sandbox, hardened runtime, privacy manifest, and version 1.0 (build 12).
+App Sandbox, hardened runtime, privacy manifest, Productivity category, and
+version 1.0 (build 13).
 
 For a command-line local build:
 
@@ -87,6 +88,12 @@ architectures, entitlements, privacy manifest, and bundled OSS licenses:
 
 ```sh
 ./Scripts/verify-app-store-export.sh
+```
+
+After verification, upload the current archive with:
+
+```sh
+./Scripts/upload-app-store.sh
 ```
 
 ## MVP scope
