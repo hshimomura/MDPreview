@@ -35,7 +35,8 @@ Heading / Markdown / Mermaid block parser
 - Textual 0.5.0 renders structured Markdown with native SwiftUI views.
 - Mermaid 11.15.0 is bundled locally; diagrams require no installation or CDN.
 - Swift Package Manager pins the dependency graph in `Package.resolved`.
-- The app targets macOS 26 and currently builds an Apple-silicon binary.
+- The app targets macOS 26 and the App Store release builds as a Universal 2
+  binary for Apple silicon and Intel Macs.
 
 ## Requirements
 
@@ -81,6 +82,12 @@ process; that bypasses normal LaunchServices application registration.
 
 The script build uses ad-hoc signing for local testing. Mac App Store archives
 must be created from the Xcode project with an Apple Distribution certificate.
+After exporting an App Store package, verify its distribution signatures,
+architectures, entitlements, privacy manifest, and bundled OSS licenses:
+
+```sh
+./Scripts/verify-app-store-export.sh
+```
 
 ## MVP scope
 
@@ -112,7 +119,7 @@ Deferred:
 - Find navigator and zoom
 - Quick Look integration (intentionally out of scope)
 - Preferences and theme selection
-- Intel support and an updater (Mac App Store distribution supplies updates)
+- A standalone updater (Mac App Store distribution supplies updates)
 
 ## License and release checklist
 
