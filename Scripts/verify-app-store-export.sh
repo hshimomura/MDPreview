@@ -58,11 +58,20 @@ build_version="$(/usr/libexec/PlistBuddy \
     -c "Print :CFBundleVersion" "$INFO_PLIST")"
 minimum_system="$(/usr/libexec/PlistBuddy \
     -c "Print :LSMinimumSystemVersion" "$INFO_PLIST")"
+document_role="$(/usr/libexec/PlistBuddy \
+    -c "Print :CFBundleDocumentTypes:0:CFBundleTypeRole" "$INFO_PLIST")"
+markdown_type="$(/usr/libexec/PlistBuddy \
+    -c "Print :CFBundleDocumentTypes:0:LSItemContentTypes:0" "$INFO_PLIST")"
+uses_non_exempt_encryption="$(/usr/libexec/PlistBuddy \
+    -c "Print :ITSAppUsesNonExemptEncryption" "$INFO_PLIST")"
 
 [[ "$bundle_identifier" == "io.github.hshimomura.MDViewer" ]]
 [[ "$marketing_version" == "1.0" ]]
 [[ "$build_version" == "11" ]]
 [[ "$minimum_system" == "26.0" ]]
+[[ "$document_role" == "Viewer" ]]
+[[ "$markdown_type" == "net.daringfireball.markdown" ]]
+[[ "$uses_non_exempt_encryption" == "false" ]]
 
 /usr/bin/codesign -d --entitlements :- "$APP_PATH" \
     >"$ENTITLEMENTS_PATH" 2>/dev/null
