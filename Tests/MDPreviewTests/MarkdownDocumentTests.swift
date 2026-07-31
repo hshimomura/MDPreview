@@ -62,6 +62,28 @@ struct WindowSizeStoreTests {
   }
 }
 
+struct MarkdownWindowLayoutTests {
+  @Test
+  func placesTwoDocumentsInEqualLeftAndRightColumns() throws {
+    let screen = CGRect(x: 100, y: 50, width: 1200, height: 800)
+    let frames = MarkdownWindowLayout.sideBySideFrames(count: 2, in: screen)
+
+    #expect(frames.count == 2)
+    #expect(frames[0] == CGRect(x: 100, y: 50, width: 600, height: 800))
+    #expect(frames[1] == CGRect(x: 700, y: 50, width: 600, height: 800))
+  }
+
+  @Test
+  func returnsNoFramesWhenThereAreNoDocuments() {
+    let frames = MarkdownWindowLayout.sideBySideFrames(
+      count: 0,
+      in: CGRect(x: 0, y: 0, width: 1200, height: 800)
+    )
+
+    #expect(frames.isEmpty)
+  }
+}
+
 struct MarkdownContentParserTests {
   @Test
   func extractsOutlineAndPreservesHeadingLevels() {

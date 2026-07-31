@@ -48,7 +48,10 @@ struct PreviewView: View {
       }
     }
     .frame(minWidth: 700, minHeight: 420)
-    .background(WindowSizeRestorer())
+    .background {
+      WindowSizeRestorer()
+      FileMenuOrganizer()
+    }
     .safeAreaInset(edge: .bottom, spacing: 0) {
       statusBar
     }

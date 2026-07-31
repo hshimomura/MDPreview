@@ -14,11 +14,12 @@ limits=(
     promotional-text 170
     keywords 100
     description 4000
+    whats-new 4000
 )
 
 typeset -a locales fields
 locales=(en-US ja)
-fields=(name subtitle promotional-text keywords description)
+fields=(name subtitle promotional-text keywords description whats-new)
 
 for locale in "$locales[@]"; do
     for field in "$fields[@]"; do

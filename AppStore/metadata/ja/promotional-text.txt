@@ -1,1 +1,1 @@
-Markdownを静かに読むためのmacOSネイティブビューアー。Live Reload、現在位置が分かる章立て、オフラインMermaid、複数文書の比較に対応します。
+Markdownを静かに読むmacOSネイティブビューアー。標準タブと個別ウィンドウ、Live Reload、現在位置が分かる章立て、オフラインMermaidに対応します。

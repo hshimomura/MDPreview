@@ -1,6 +1,6 @@
 MD Viewer: Reading Window is a focused, read-only Markdown viewer built for macOS 26.
 
-Open one or more .md files and read them as clean, structured documents without switching into an editor. Each document opens in its own window, and a single command arranges multiple windows side by side for comparison.
+Open .md files and read them as clean, structured documents without switching into an editor. Each document opens in its own window by default, with an option to add files as native macOS tabs. A single command arranges open documents side by side for comparison.
 
 LIVE RELOAD
 Keep using your preferred editor. MD Viewer detects ordinary saves and atomic file replacements, then refreshes the reading window automatically.
@@ -12,7 +12,7 @@ MERMAID, OFFLINE
 Mermaid fenced code blocks render locally with the runtime included in the app. There is no setup, package installation, CDN, account, or cloud service.
 
 NATIVE MAC EXPERIENCE
-Use Command-O to open multiple files, Command-W to close the active window, and Command-P for the standard macOS Print panel. PDF output inherits the Markdown file name. Window size is restored across launches, and appearance follows the system.
+Use Command-O to open a file in a new window, Command-Option-O to open one in a new tab, Command-W to close the active tab or window, and Command-P for the standard macOS Print panel. PDF output inherits the Markdown file name. Window size is restored across launches, and appearance follows the system.
 
 MD Viewer intentionally has no editing feature and no Quick Look extension. It is a calm reading window for local Markdown documents.
 

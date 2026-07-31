@@ -102,6 +102,8 @@ struct WindowSizeRestorer: NSViewRepresentable {
 
       detach()
       self.window = window
+      window.tabbingMode = .automatic
+      window.tabbingIdentifier = "io.github.hshimomura.MDViewer.document"
 
       let visibleSize =
         window.screen?.visibleFrame.size

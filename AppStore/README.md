@@ -12,8 +12,8 @@ submission state.
 - Platform: macOS
 - Primary category: Productivity
 - Price: Free
-- Version: `1.0`
-- Build: `13`
+- Version: `1.1`
+- Build: `14`
 - Copyright: `2026 Hideaki Shimomura`
 - Support URL: `https://hshimomura.github.io/MDPreview/support`
 - Marketing URL: `https://hshimomura.github.io/MDPreview/`

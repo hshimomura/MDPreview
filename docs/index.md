@@ -14,7 +14,8 @@ and refresh automatically when another app saves them.
 - Native SwiftUI interface built specifically for macOS
 - Live reload after external saves, including atomic file replacements
 - A chapter outline that follows the section you are reading
-- Multiple document windows with side-by-side arrangement
+- Individual document windows with optional native tabs and side-by-side
+  arrangement
 - Offline Mermaid diagrams with no setup or CDN
 - Native printing and PDF output
 - Light and dark appearances that follow the system

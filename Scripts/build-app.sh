@@ -26,9 +26,9 @@ mkdir -p \
 /usr/bin/plutil -replace CFBundleIdentifier \
     -string io.github.hshimomura.MDViewer \
     "$APP_PATH/Contents/Info.plist"
-/usr/bin/plutil -replace CFBundleShortVersionString -string 1.0 \
+/usr/bin/plutil -replace CFBundleShortVersionString -string 1.1 \
     "$APP_PATH/Contents/Info.plist"
-/usr/bin/plutil -replace CFBundleVersion -string 13 \
+/usr/bin/plutil -replace CFBundleVersion -string 14 \
     "$APP_PATH/Contents/Info.plist"
 /usr/bin/plutil -replace LSMinimumSystemVersion -string 26.0 \
     "$APP_PATH/Contents/Info.plist"

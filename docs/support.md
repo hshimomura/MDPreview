@@ -13,8 +13,12 @@ permalink: /support
 
 ## Common actions
 
-- Open one or more files with **File > Open Markdown Files…** (`Command-O`).
-- Use **Window > Arrange Markdown Windows Side by Side** to compare documents.
+- Open a file in a separate window with **File > Open File…** (`Command-O`).
+- Add a file to the current window with **File > Open File in New Tab…**
+  (`Command-Option-O`).
+- Use the standard **Window** menu to move between tabs or merge windows.
+- Use **Window > Arrange Markdown Documents Side by Side** to compare all open
+  documents. Tabs are separated into windows before they are arranged.
 - Toggle the chapter outline from the toolbar or View menu.
 - Print with `Command-P`; choose **PDF > Save as PDF…** for PDF output.
 - Save the file in an external editor to trigger Live Reload.

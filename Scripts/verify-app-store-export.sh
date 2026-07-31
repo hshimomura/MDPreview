@@ -68,8 +68,8 @@ app_category="$(/usr/libexec/PlistBuddy \
     -c "Print :LSApplicationCategoryType" "$INFO_PLIST")"
 
 [[ "$bundle_identifier" == "io.github.hshimomura.MDViewer" ]]
-[[ "$marketing_version" == "1.0" ]]
-[[ "$build_version" == "13" ]]
+[[ "$marketing_version" == "1.1" ]]
+[[ "$build_version" == "14" ]]
 [[ "$minimum_system" == "26.0" ]]
 [[ "$document_role" == "Viewer" ]]
 [[ "$markdown_type" == "net.daringfireball.markdown" ]]
@@ -118,6 +118,6 @@ done
 package_checksum="$(/usr/bin/shasum -a 256 "$PACKAGE_PATH" |
     /usr/bin/awk '{print $1}')"
 
-print "Verified MD Viewer 1.0 (13) App Store export."
+print "Verified MD Viewer 1.1 (14) App Store export."
 print "Architectures: $architectures"
 print "Package SHA-256: $package_checksum"

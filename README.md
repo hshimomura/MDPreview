@@ -28,8 +28,8 @@ Heading / Markdown / Mermaid block parser
         +-- bundled Mermaid runtime (offline diagram)
 ```
 
-- `DocumentGroup(viewing:)` provides read-only document lifecycle and
-  multiwindow behavior.
+- `DocumentGroup(viewing:)` provides read-only document lifecycle. Documents
+  open in individual windows by default and can be grouped in native tabs.
 - `net.daringfireball.markdown` registers `.md` and `.markdown` with a
   `Viewer` role and `Alternate` handler rank.
 - Textual 0.5.0 renders structured Markdown with native SwiftUI views.
@@ -56,7 +56,7 @@ open MDViewer.xcodeproj
 The generated `MDViewer.xcodeproj` contains the macOS app and unit-test targets.
 The App Store scheme uses bundle identifier `io.github.hshimomura.MDViewer`,
 App Sandbox, hardened runtime, privacy manifest, Productivity category, and
-version 1.0 (build 13).
+version 1.1 (build 14).
 
 For a command-line local build:
 
@@ -101,12 +101,14 @@ After verification, upload the current archive with:
 Included:
 
 - Finder and Open-menu handling for `.md` and `.markdown`
-- Multiple read-only document windows, multi-file Open, and side-by-side
-  window arrangement
+- Individual read-only document windows by default, optional native macOS tabs,
+  and side-by-side document arrangement
+- `Command-O` opens a file in a new window; `Command-Option-O` opens a file in
+  a new tab
 - GitHub-like native rendering
 - Tables, lists, code blocks, links, and selectable text
 - HTML-style `<br>`, `<br/>`, and `<br />` line breaks, including table cells
-- `Command-W` closes the active document window
+- `Command-W` closes the active document tab or window
 - The last document-window size is restored across launches
 - Native macOS icon with a Markdown document and glass reading lens
 - Live reload after saves from external editors, including atomic replacements

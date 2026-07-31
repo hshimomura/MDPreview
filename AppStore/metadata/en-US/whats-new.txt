@@ -1,0 +1,4 @@
+• Added the ability to open Markdown documents in native macOS tabs.
+• Choose between opening a file in a separate window or a new tab from the File menu.
+• Separate tabs and arrange open documents side by side for comparison.
+• Includes stability and usability improvements.
